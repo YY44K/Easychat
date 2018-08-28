@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by skyzheng on 8/23/18.
 //
 
@@ -23,6 +23,7 @@ namespace XQ
 
         switch (pXMessage->type)
         {
+			/*
             case XQ::MESSAGE_TYPE_SHORT:
                 for (std::list<XN::XTcpSocket>::iterator _ptr = socketList.begin(); _ptr != socketList.end(); _ptr++)
                     _ptr->Send(ptr->GetRecvBuf(), ptr->GetRecvBufSize());
@@ -40,6 +41,10 @@ namespace XQ
 
             default:
                 break;
+
+			*/
+
+
         }
 
     }
