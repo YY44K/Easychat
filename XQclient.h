@@ -10,7 +10,9 @@
 #include "XTcpSocket.h"
 #include "XError.h"
 
-#include <pthread.h>
+//#include <pthread.h>
+#include <thread>
+#include <mutex>
 #include <string>
 
 namespace XQ
@@ -19,7 +21,7 @@ namespace XQ
     {
     private:
         std::string name;
-        pthread_mutex_t mutex_lock;
+        std::mutex mutex_lock;
         bool OK;
         XN::XTcpSocket mainSocket;
         static void* sendThread(void* arg);
