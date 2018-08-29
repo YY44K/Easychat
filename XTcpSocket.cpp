@@ -19,7 +19,7 @@ namespace XN
         sockfd = socket(family, type, protocol);
         if (sockfd <= 0) throw XError("socket failed");
 
-        const int SO_REUSEADDR_ON = 1;
+        const char SO_REUSEADDR_ON = 1;
         setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &SO_REUSEADDR_ON, sizeof(SO_REUSEADDR_ON));
     }
 
@@ -39,8 +39,25 @@ namespace XN
 
         sockfd = other.sockfd;
 
-        const int SO_REUSEADDR_ON = 1;
+        const char SO_REUSEADDR_ON = 1;
         setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &SO_REUSEADDR_ON, sizeof(SO_REUSEADDR_ON));
+    }
+
+    XTcpSocket& XTcpSocket::operator=(const XN::XTcpSocket& other)
+    {
+        recvBufSize = other.recvBufSize;
+        sendBufSize = other.sendBufSize;
+        delete [] recvBuf;
+        delete [] sendBuf;
+        recvBuf = new char[recvBufSize];
+        sendBuf = new char[sendBufSize];
+
+        memcpy(recvBuf, other.recvBuf, recvBufSize);
+        memcpy(sendBuf, other.sendBuf, sendBufSize);
+
+        sockfd = other.sockfd;
+
+        return *this;
     }
 
     void XTcpSocket::Connect(const char *ip_string, int port)
@@ -53,7 +70,7 @@ namespace XN
             throw XError("connect failed");
     }
 
-    void XTcpSocket::Bind(int port, in_addr_t addr)
+    void XTcpSocket::Bind(int port, long addr)
     {
         struct sockaddr_in sockAddr;
         sockAddr.sin_family = AF_INET;
@@ -72,7 +89,7 @@ namespace XN
 
     void XTcpSocket::Close()
     {
-        ::close(sockfd);
+        ::closesocket(sockfd);
     }
 
     XTcpSocket XTcpSocket::Accept()
@@ -105,22 +122,22 @@ namespace XN
         return Send(flags);
     }
 
-    int XTcpSocket::GetRecvBufSize() const
+    int XTcpSocket::GetRecvBufSize()
     {
         return recvBufSize;
     }
 
-    int XTcpSocket::GetSendBufSize() const
+    int XTcpSocket::GetSendBufSize()
     {
         return sendBufSize;
     }
 
-    char* XTcpSocket::GetRecvBuf() const
+    char* XTcpSocket::GetRecvBuf()
     {
         return recvBuf;
     }
 
-    char* XTcpSocket::GetSendBuf() const
+    char* XTcpSocket::GetSendBuf()
     {
         return sendBuf;
     }
@@ -132,7 +149,7 @@ namespace XN
         memcpy((void*)sendBuf, (void*)src, length);
     }
 
-    int XTcpSocket::GetSockPort() const
+    int XTcpSocket::GetSockPort()
     {
         struct sockaddr_in sockAddr;
         socklen_t lenSockAddr = sizeof(sockAddr);
@@ -140,7 +157,7 @@ namespace XN
         return ntohs(sockAddr.sin_port);
     }
 
-    int XTcpSocket::GetPeerPort() const
+    int XTcpSocket::GetPeerPort()
     {
         struct sockaddr_in peerAddr;
         socklen_t lenPeerAddr = sizeof(peerAddr);
@@ -148,7 +165,7 @@ namespace XN
         return ntohs(peerAddr.sin_port);
     }
 
-    char* XTcpSocket::GetSockIp(char* dest) const
+    char* XTcpSocket::GetSockIp(char* dest)
     {
         struct sockaddr_in sockAddr;
         socklen_t lenSockAddr = sizeof(sockAddr);
@@ -157,7 +174,7 @@ namespace XN
         return dest;
     }
 
-    char* XTcpSocket::GetPeerIp(char* dest) const
+    char* XTcpSocket::GetPeerIp(char* dest)
     {
         struct sockaddr_in peerAddr;
         socklen_t lenPeerAddr = sizeof(peerAddr);
@@ -166,7 +183,7 @@ namespace XN
         return dest;
     }
 
-    char* XTcpSocket::GetSockIp() const
+    char* XTcpSocket::GetSockIp()
     {
         static char ip_string[20];
         struct sockaddr_in sockAddr;
@@ -176,7 +193,7 @@ namespace XN
         return ip_string;
     }
 
-    char* XTcpSocket::GetPeerIp() const
+    char* XTcpSocket::GetPeerIp()
     {
         static char ip_string[20];
         struct sockaddr_in peerAddr;

@@ -35,7 +35,7 @@ namespace XQ
 namespace XQ
 {
 
-	const int 
+	
 
 	struct message
 	{

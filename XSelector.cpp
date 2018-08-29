@@ -6,7 +6,8 @@
 
 namespace XN
 {
-    XSelector::XSelector(long tv_usec)
+    XSelector::XSelector(long tv_usec) :
+        sockSet()
     {
         if (tv_usec != XN::SELECT_TIME_BLOCK)
         {
@@ -20,7 +21,8 @@ namespace XN
         maxSockfd = -1;
     }
 
-    XSelector::XSelector(const XSelector& other)
+    XSelector::XSelector(const XSelector& other) :
+        sockSet()
     {
         if (other.stopTime != NULL)
         {
@@ -32,6 +34,25 @@ namespace XN
             stopTime = NULL;
 
         maxSockfd = other.maxSockfd;
+    }
+
+    XSelector& XSelector::operator=(const XSelector& other)
+    {
+        sockSet = other.sockSet;
+        if (other.stopTime != NULL)
+        {
+            stopTime->tv_sec = other.stopTime->tv_sec;
+            stopTime->tv_usec = other.stopTime->tv_usec;
+        }
+        else
+        {
+            delete stopTime;
+            stopTime = NULL;
+        }
+
+        maxSockfd = other.maxSockfd;
+
+        return *this;
     }
 
     void XSelector::AddSock(int sockfd, int type)
@@ -78,43 +99,43 @@ namespace XN
             maxSockfd = (maxSockfd < ptr->first) ? ptr->first : maxSockfd;
     }
 
-    bool XSelector::IsIn(int sock) const
+    bool XSelector::IsIn(int sock)
     {
         return (sockSet.find(sock) == sockSet.end()) ? false : true;
 
     }
 
-    bool XSelector::IsIn(const XN::XTcpSocket &xTcpSocket) const
+    bool XSelector::IsIn(const XN::XTcpSocket &xTcpSocket)
     {
         return sockSet.find(xTcpSocket.GetSockfd()) == sockSet.end() ? false : true;
     }
 
-    bool XSelector::IsRead(int sock) const
+    bool XSelector::IsRead(int sock)
     {
         return FD_ISSET(sock, &readSet);
     }
 
-    bool XSelector::IsRead(const XN::XTcpSocket &xTcpSocket) const
+    bool XSelector::IsRead(const XN::XTcpSocket &xTcpSocket)
     {
         return FD_ISSET(xTcpSocket.GetSockfd(), &readSet);
     }
 
-    bool XSelector::IsWrit(int sock) const
+    bool XSelector::IsWrit(int sock)
     {
         return FD_ISSET(sock, &writSet);
     }
 
-    bool XSelector::IsWrit(const XN::XTcpSocket &xTcpSocket) const
+    bool XSelector::IsWrit(const XN::XTcpSocket &xTcpSocket)
     {
         return FD_ISSET(xTcpSocket.GetSockfd(), &writSet);
     }
 
-    bool XSelector::IsExce(int sock) const
+    bool XSelector::IsExce(int sock)
     {
         return FD_ISSET(sock, &exceSet);
     }
 
-    bool XSelector::IsExce(const XN::XTcpSocket &xTcpSocket) const
+    bool XSelector::IsExce(const XN::XTcpSocket &xTcpSocket)
     {
         return FD_ISSET(xTcpSocket.GetSockfd(), &exceSet);
     }

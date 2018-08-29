@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sqlite3.h> 
-#include <string.h>
+#include <string>
+#include "sqlite3.h"
 
 
 class sql
@@ -9,7 +9,7 @@ class sql
 private:
 
 	sqlite3 * db;
-	string dbpath;
+	std::string dbpath;
 	char *zErrMsg = 0;
 	int  rc;
 	char *sql;
@@ -69,7 +69,7 @@ public:
 		return 0;
 	}
 
-	void setsqlstr(string sql)
+	void setsqlstr(std::string sql)
 	{
 		char*(sql);
 	}

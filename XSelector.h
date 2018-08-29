@@ -5,14 +5,13 @@
 #ifndef XN_XSELECTOR_H
 #define XN_XSELECTOR_H
 
-#include <sys/select.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <unistd.h>
-
+#include <time.h>
+#include <WinSock2.h>
 #include <list>
 #include <map>
 #include <iostream>
+#pragma comment(lib,"ws2_32.lib")
+
 #include "XTcpSocket.h"
 
 namespace XN
@@ -40,6 +39,7 @@ namespace XN
     public:
         XSelector(long tv_usec);
         XSelector(const XSelector& other);
+        XSelector& operator= (const XSelector& other);
         ~XSelector();
 
         void AddSock(int sockfd, int type);
@@ -47,14 +47,14 @@ namespace XN
         void ClearSock(int sockfd);
         void ClearSock(const XTcpSocket& xTcpSocket);
 
-        bool IsIn(int sock) const;
-        bool IsIn(const XTcpSocket& xTcpSocket) const;
-        bool IsRead(int sock) const;
-        bool IsRead(const XTcpSocket& xTcpSocket) const;
-        bool IsWrit(int sock) const;
-        bool IsWrit(const XTcpSocket& xTcpSocket) const;
-        bool IsExce(int sock) const;
-        bool IsExce(const XTcpSocket& xTcpSocket) const;
+        bool IsIn(int sock);
+        bool IsIn(const XTcpSocket& xTcpSocket);
+        bool IsRead(int sock);
+        bool IsRead(const XTcpSocket& xTcpSocket);
+        bool IsWrit(int sock);
+        bool IsWrit(const XTcpSocket& xTcpSocket);
+        bool IsExce(int sock);
+        bool IsExce(const XTcpSocket& xTcpSocket);
 
         int Select();
     };
