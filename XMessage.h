@@ -37,12 +37,22 @@ namespace XQ
 
 	
 
-	struct message
+	struct XMessage
 	{
 		int type;
-		long time;
-		char toUser[32];
-		char fromUser[32];
+		/*
+			now testing 
+			0---login
+			1---logout
+			2---text
+
+		*/
+		/*
+			need more dataspace
+
+			sender's maching code
+			reciver's id
+		*/
 		char data[1024];
 	};
 }

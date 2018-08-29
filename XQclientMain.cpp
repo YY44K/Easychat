@@ -6,6 +6,13 @@
 
 int main()
 {
+
+	/*
+		这一部分应该改成登陆功能
+		大致：
+		发送本机机器码，需登陆账号密码，执行登陆
+	*/
+
     std::cout << "Your name : ";
     std::string name;
     std::cin >> name;

@@ -21,9 +21,13 @@ namespace XQ
     {
         XQ::XMessage* pXMessage = (XQ::XMessage*)ptr->GetRecvBuf();
 
+		/*
+		此处根据是否是登陆操作与是否需要群发，检查消息并且存档
+		*/
+		/*
         switch (pXMessage->type)
         {
-			/*
+			
             case XQ::MESSAGE_TYPE_SHORT:
                 for (std::list<XN::XTcpSocket>::iterator _ptr = socketList.begin(); _ptr != socketList.end(); _ptr++)
                     _ptr->Send(ptr->GetRecvBuf(), ptr->GetRecvBufSize());
@@ -42,10 +46,11 @@ namespace XQ
             default:
                 break;
 
-			*/
+			
 
 
         }
+		*/
 
     }
 
@@ -89,7 +94,7 @@ namespace XQ
 
                 }
 
-                // log ...
+                // 日志
                 std::cout << "LOG: " << "\t";
                 for (std::list<XN::XTcpSocket>::iterator ptr = socketList.begin(); ptr != socketList.end(); ptr++)
                     std::cout << ptr->GetSockfd() << "\t";

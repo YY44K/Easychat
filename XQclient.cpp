@@ -6,6 +6,9 @@
 
 namespace XQ
 {
+
+	//客户端发送消息线程，需要改用win线程库
+	//后续应该改成仅发送不读入，读入线程去图形库事件
     void* XQclient::sendThread(void *arg)
     {
         XQclient* ptr = (XQclient*)arg;
@@ -13,12 +16,19 @@ namespace XQ
         {
             char buf[100];
             memset(buf, 0, sizeof(buf));
+			std::cout << "Please enter an text for test." << std::endl;
             std::cin >> buf;
 
             XQ::XMessage newMessage;
+			/*
             newMessage.type = XQ::MESSAGE_TYPE_SHORT;
             memcpy(&newMessage.name, ptr->name.c_str(), sizeof(ptr->name.c_str()));
             memcpy(&newMessage.data, buf, sizeof(buf));
+			*/
+			newMessage.type = 3;
+			memcpy(&newMessage.data, buf, sizeof(buf));
+
+
 
             ptr->mainSocket.Send((char*)&newMessage, sizeof(newMessage));
             if (!strcmp(buf, "exit"))
